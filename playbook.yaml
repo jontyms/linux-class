@@ -1,0 +1,101 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Perform a dist-upgrade.
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: yes
+    - name: Check if a reboot is required.
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+        get_checksum: no
+      register: reboot_required_file
+
+    - name: Reboot the server (if required).
+      ansible.builtin.reboot:
+      when: reboot_required_file.stat.exists == true
+
+    - name: Remove dependencies that are no longer required.
+      ansible.builtin.apt:
+        autoremove: yes
+    - name: Install a list of packages
+      ansible.builtin.apt:
+        pkg:
+        - apache2
+        - acl
+        - zsh
+        - neovim
+        - nano
+        - wget
+        - curl
+        - minetest-server
+        - neofetch
+        - postgresql
+        - python3-psycopg2
+    - name: Stop service apache2 on debian, if running
+      ansible.builtin.systemd_service:
+        name: apache2
+        state: stopped
+        enabled: false
+    - name: add postgres user
+      become_user: postgres
+      community.postgresql.postgresql_user:
+          name: minetest
+          password: minetest-password
+    - name: postgres config for minetest-server
+      become_user: postgres
+      community.postgresql.postgresql_db:
+           name: myworld
+           owner: minetest
+    - name: add postgres user
+      become_user: postgres
+      community.postgresql.postgresql_user:
+          db: myworld
+          name: minetest
+          password: minetest-password
+    - name: GRANT ALL PRIVILEGES ON DATABASE myworld TO minetest
+      become_user: postgres
+      community.postgresql.postgresql_privs:
+        db: myworld
+        privs: ALL
+        type: database
+        role: minetest
+    - name: Copy file index.html
+      ansible.builtin.copy:
+        src: ./index.html
+        dest: /var/www/html/
+    - name: Copy file minetest world
+      ansible.builtin.copy:
+        src: ./world.mt
+        dest: /var/games/minetest-server/.minetest/worlds/world/
+      register: minetest-changed
+    - name: Stop service minetest on debian, if running
+      when: minetest-changed:changed
+      ansible.builtin.systemd_service:
+        name: minetest-server
+        state: restarted
+        enabled: true
+    - name: ssh allow password
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?\s*PasswordAuthentication\s'
+        line: 'PasswordAuthentication yes'
+        state: present
+      register: sshd
+    - name: restart service sshd on debian, if running
+      when: ssh:changed
+      ansible.builtin.systemd_service:
+        name: sshd
+        state: restarted
+        enabled: true
+    - name: Clean artifact path
+      file:
+        state: absent
+        path: "/home/ubuntu/.bash_history"
+    - name: Clean artifact path2
+      file:
+        state: absent
+        path: "/home/backdoor/.bash_history"

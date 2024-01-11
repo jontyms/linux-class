@@ -1,0 +1,6 @@
+[hosts]
+ip/hostname
+
+[hosts:vars]
+ansible_user=backdoor
+ansible_ssh_private_key_file=./ansible-key

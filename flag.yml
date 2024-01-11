@@ -1,0 +1,87 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+  tasks:
+  - name: Root / flag
+    copy:
+      dest: "/flag.txt"
+      content: |
+        flag_173bdd81fc45ce32ba42647754b42d60
+  - name: Create flag user
+    ansible.builtin.user:
+      name: flag_157e2b873a7ec
+      comment: John Doe
+  - name: User home flag
+    copy:
+      dest: "/home/ubuntu/flag.txt"
+      content: |
+        flag_0b899cc43eb1cd6f6379b0df86285408
+  - name: Flag in etc
+    copy:
+      dest: "/etc/flag.txt"
+      content: |
+        flag_d8c43a3b5d5ae4db20ba03133cb44db7
+  - name: add flag to /etc/ssh/sshd_config
+    ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
+      insertbefore: '^#Banner none'
+      line: '# flag_e6cfc94ebeb4800352c37fd242761fff'
+  - name: add flag to /etc/sudoers 
+    ansible.builtin.lineinfile:
+      path: /etc/sudoers
+      line: '# flag_f02435ecc4c1fccd8955f6166e50d296'
+  - name: add kernel arg
+    ansible.builtin.lineinfile:
+      path: /etc/default/grub
+      search_string: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"'
+      line: GRUB_CMDLINE_LINUX_DEFAULT="quiet splash flag_9c114b57ba9680ce0ac56181fdedd468"
+  - name: Flag in bin
+    copy:
+      dest: "/bin/flag.txt"
+      content: |
+        flag_2b00508d07552e8ec31059610183590c
+  - name: add flag to /etc/environment
+    ansible.builtin.lineinfile:
+      path: /etc/environment
+      line: 'FLAG=flag_6613deeddbf8ccd51f91b81172643baf'
+  - name: Add flag bin dir to system-wide $PATH.
+    copy:
+        dest: /etc/profile.d/custom-path.sh
+        content: 'PATH=$PATH:/opt/flag-path'
+  - name: create /flag-bin
+    ansible.builtin.file:
+      path: /opt/flag-path
+      state: directory
+  - name: create /flag-bin
+    ansible.builtin.file:
+      path: /flag-path
+      state: directory
+  - name: Flag in custom-bin
+    copy:
+      dest: "/opt/flag-path/flag.txt"
+      content: |
+        flag_3d4573f3f80b4fbcad048de64646f98f
+  - name: Flag in custom-bin
+    copy:
+      dest: "/flag-path/flag.txt"
+      content: |
+        flag_3d4573f3f80b4fbcad048de64646f98f
+  - name: Flag in root home
+    copy:
+      dest: "/root/flag.txt"
+      content: |
+        flag_1b9cdc27921828086264aca1b59e29a5
+  - name: Create group
+    group:
+        name: "flage70649c4537f871d01a6"
+        state: present
+  - name: Flag in var/log
+    copy:
+      dest: "/var/log/flag.txt"
+      content: |
+        flag_4903f0d7c2f143f5ca2f180600c11635ddd
+  - name: add flag to /etc/fstab
+    ansible.builtin.lineinfile:
+      path: /etc/fstab
+      line: '# flag_7848c7b956b1c3bbdbdf3586feb315e1'
