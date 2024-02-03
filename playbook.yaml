@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: hosts
   gather_facts: yes
   become: yes
 
@@ -71,9 +71,7 @@
       ansible.builtin.copy:
         src: ./world.mt
         dest: /var/games/minetest-server/.minetest/worlds/world/
-      register: minetest-changed
     - name: Stop service minetest on debian, if running
-      when: minetest-changed:changed
       ansible.builtin.systemd_service:
         name: minetest-server
         state: restarted
@@ -84,9 +82,7 @@
         regexp: '^#?\s*PasswordAuthentication\s'
         line: 'PasswordAuthentication yes'
         state: present
-      register: sshd
     - name: restart service sshd on debian, if running
-      when: ssh:changed
       ansible.builtin.systemd_service:
         name: sshd
         state: restarted

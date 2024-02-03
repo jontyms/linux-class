@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: hosts
   gather_facts: yes
   become: yes
   tasks:
@@ -8,10 +8,15 @@
       dest: "/flag.txt"
       content: |
         flag_173bdd81fc45ce32ba42647754b42d60
+  - name: Create group
+    group:
+        name: "not-a-flag"
+        state: present
   - name: Create flag user
     ansible.builtin.user:
       name: flag_157e2b873a7ec
       group: not-a-flag
+      create_home: false
       comment: John Doe
   - name: User home flag
     copy:
