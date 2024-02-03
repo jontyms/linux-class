@@ -1,0 +1,62 @@
+Question 1
+
+This flag is at the root of the file system:
+ 
+Question 2
+
+Take a look at the users on your system
+ 
+Question 3
+
+
+Take a look at your own home directory
+ 
+Question 4
+
+
+Take a look in the directory where config is stored
+ 
+Question 5
+
+
+You are logged in with this protocol right now, check the config
+ 
+Question 6
+
+
+Take a look at the config of a program you can use to execute programs as other users
+ 
+Question 7
+
+
+Take a look at the directory  where executable files are stored
+ 
+Question 8
+
+
+Check your environment variables
+ 
+Question 9
+
+
+Take a look at your path
+ 
+Question 10
+
+
+Look where root’s home is
+ 
+Question 11
+
+
+Take a look at your groups
+ 
+Question 12
+
+
+This flag is where logs are stored 
+ 
+Question 13
+
+
+Disks are configured from here

@@ -11,6 +11,7 @@
   - name: Create flag user
     ansible.builtin.user:
       name: flag_157e2b873a7ec
+      group: not-a-flag
       comment: John Doe
   - name: User home flag
     copy:
@@ -31,6 +32,7 @@
     ansible.builtin.lineinfile:
       path: /etc/sudoers
       line: '# flag_f02435ecc4c1fccd8955f6166e50d296'
+# doesn't work
   - name: add kernel arg
     ansible.builtin.lineinfile:
       path: /etc/default/grub
@@ -49,22 +51,13 @@
     copy:
         dest: /etc/profile.d/custom-path.sh
         content: 'PATH=$PATH:/opt/flag-path'
-  - name: create /flag-bin
+  - name: create /opt/flag-bin
     ansible.builtin.file:
       path: /opt/flag-path
-      state: directory
-  - name: create /flag-bin
-    ansible.builtin.file:
-      path: /flag-path
       state: directory
   - name: Flag in custom-bin
     copy:
       dest: "/opt/flag-path/flag.txt"
-      content: |
-        flag_3d4573f3f80b4fbcad048de64646f98f
-  - name: Flag in custom-bin
-    copy:
-      dest: "/flag-path/flag.txt"
       content: |
         flag_3d4573f3f80b4fbcad048de64646f98f
   - name: Flag in root home
